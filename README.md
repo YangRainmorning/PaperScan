@@ -29,7 +29,7 @@ what `paperscan` produced from it with **no arguments at all**.
 
 | | |
 |---|---|
-| **[Open it in a browser](https://YOUR-PROJECT.pages.dev)** | Nothing to install. Drop a photo on the page, get a scan back. Works on a phone, including the camera. The photo is decoded, rectified and re-encoded **on your device** — there is no server, nothing is uploaded, and it works offline after the first visit. |
+| **[Open it in a browser](https://paperscan.pages.dev)** | Nothing to install. Drop a photo on the page, get a scan back. Works on a phone, including the camera. The photo is decoded, rectified and re-encoded **on your device** — there is no server, nothing is uploaded, and it works offline after the first visit. |
 | **[Install the CLI](#install)** | Same algorithm, scriptable and batchable, writes lossless PNGs at full resolution. For when you have fifty photos and a shell. |
 
 Both share the same five-stage pipeline and the same regression target; see
@@ -257,7 +257,7 @@ the documented default because `github.io` is often slow or unreachable from mai
 4. Environment variable `NODE_VERSION` = `24`.
 5. Deploy. Pushes to `main` redeploy automatically.
 
-Then replace `YOUR-PROJECT` in this README (and in `README.zh-CN.md`) with the assigned
+Then replace `paperscan` in this README (and in `README.zh-CN.md`) with the assigned
 `*.pages.dev` hostname. `web/public/_headers` is picked up as-is and sets a strict CSP and
 long-lived caching for the hashed assets.
 
