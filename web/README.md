@@ -24,7 +24,7 @@ also costs nothing to host and never uploads anybody's documents.
 src/core/        the algorithm — no DOM, no canvas, no Node
 src/worker.ts    runs core/ off the main thread
 src/imageio.ts   the only place that touches canvas: decode a file, encode a result
-src/main.ts      UI wiring
+src/main.ts      UI wiring, including the corner handles and the orientation picker
 src/i18n.ts      English and Simplified Chinese strings
 ```
 
@@ -56,6 +56,29 @@ of the pixel buffer (transferred, not copied) and posts progress back per stage.
   wants; a 40 MP PNG is 50 MB, which is not what somebody on a phone wants. The web app
   defaults to JPEG at quality 92 (about 8 MB for the same scan) and offers PNG in the
   advanced panel.
+- **Orientation.** The CLI takes `--reading-edge` and expects you to know which way the page
+  was lying. The web app rectifies in the detection orientation and offers the four possible
+  rotations as thumbnails, because "click rotate and see" is a poor way to answer a question
+  the user can answer instantly by looking.
+
+## Correcting the corners
+
+Automatic detection is good on a plain background and **not** reliable on a cluttered one.
+The sheet is found by thresholding to "bright and warm" pixels, and a pale wooden table or
+a light quilt can hold patches that pass the same test. On the reference certificate — a
+sheet on a wooden table over a patterned quilt — detection lands within about 330 px of the
+hand-measured corners, and on a 7500 px edge that is a visible tilt.
+
+So the detector's answer is treated as a **starting point**: the page quad is drawn over the
+photo with a draggable handle at each corner, and releasing a handle re-runs the pipeline
+with those corners. Dragging all four onto the sheet reproduces the hand-measured result to
+within 3 px (5290x7451 against the CLI's 5290x7448), which is the honest way to get an exact
+answer on a hard photo. `Detect again` puts it back.
+
+This is also why the app rectifies in the detection orientation and rotates the finished
+scan afterwards, rather than re-running the pipeline with a different reading edge: the
+orientation picker shows all four rotations as thumbnails, so a wrong guess costs one click
+instead of a guess-and-check cycle.
 
 ## Browser support
 

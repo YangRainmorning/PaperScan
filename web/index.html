@@ -68,16 +68,21 @@
           </figure>
         </div>
 
-        <label class="toggle">
-          <input type="checkbox" id="showDetection" />
-          <span id="showDetectionLabel"></span>
-        </label>
+        <div class="corners">
+          <span id="cornerHint" class="field-label"></span>
+          <button id="resetCorners" class="ghost small" type="button"></button>
+        </div>
 
         <dl class="stats" id="stats"></dl>
 
+        <div class="orientation">
+          <span class="field-label" id="orientationLabel"></span>
+          <p class="orient-hint" id="orientationHint"></p>
+          <div class="orient-choices" id="orientChoices" role="radiogroup"></div>
+        </div>
+
         <div class="actions">
           <a id="download" class="primary" download></a>
-          <button id="rotate" class="secondary" type="button"></button>
           <button id="again" class="ghost" type="button"></button>
         </div>
 

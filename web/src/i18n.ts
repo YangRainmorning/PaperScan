@@ -21,11 +21,15 @@ export interface Strings {
   readonly after: string;
   readonly showDetection: string;
   readonly detected: string;
+  readonly cornerHint: string;
+  readonly resetCorners: string;
 
   readonly download: string;
   readonly rotate: string;
   readonly again: string;
   readonly advanced: string;
+  readonly orientation: string;
+  readonly orientationHint: string;
 
   readonly format: string;
   readonly formatJpeg: string;
@@ -73,11 +77,15 @@ const en: Strings = {
   after: 'Scan',
   showDetection: 'Show what was detected',
   detected: 'Page found',
+  cornerHint: 'Drag the four corners onto the page if the framing looks off.',
+  resetCorners: 'Detect again',
 
   download: 'Download',
   rotate: 'Wrong way up? Rotate',
   again: 'Another photo',
   advanced: 'Advanced',
+  orientation: 'Which way up is it?',
+  orientationHint: 'Tap the one whose text reads normally.',
 
   format: 'Format',
   formatJpeg: 'JPEG — much smaller',
@@ -126,11 +134,15 @@ const zh: Strings = {
   after: '扫描件',
   showDetection: '显示检测结果',
   detected: '已找到纸面',
+  cornerHint: '如果框得不准，直接拖动四个角到纸的边缘。',
+  resetCorners: '重新自动检测',
 
   download: '下载',
   rotate: '方向不对？转一下',
   again: '换一张',
   advanced: '高级选项',
+  orientation: '哪一张文字是正的？',
+  orientationHint: '点一下那张看着正常的就行。',
 
   format: '输出格式',
   formatJpeg: 'JPEG —— 体积小得多',

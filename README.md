@@ -29,7 +29,7 @@ what `paperscan` produced from it with **no arguments at all**.
 
 | | |
 |---|---|
-| **[Open it in a browser](https://paperscan.pages.dev)** | Nothing to install. Drop a photo on the page, get a scan back. Works on a phone, including the camera. The photo is decoded, rectified and re-encoded **on your device** — there is no server, nothing is uploaded, and it works offline after the first visit. |
+| **[Open it in a browser](https://paperscan.pages.dev)** | Nothing to install. Drop a photo on the page, get a scan back. Works on a phone, including the camera. The photo is decoded, rectified and re-encoded **on your device** — there is no server, nothing is uploaded, and it works offline after the first visit. Drag the corner handles if the detector mis-frames your page, and pick the right orientation from four thumbnails. |
 | **[Install the CLI](#install)** | Same algorithm, scriptable and batchable, writes lossless PNGs at full resolution. For when you have fifty photos and a shell. |
 
 Both share the same five-stage pipeline and the same regression target; see

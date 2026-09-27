@@ -9,16 +9,34 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **Draggable corners in the web app.** The page quad is drawn over the photo with a handle
+  at each corner; releasing one re-runs the pipeline with those corners. Automatic detection
+  is only as good as the surface the sheet is lying on — on the reference certificate it
+  lands about 330 px from the hand-measured corners, which leaves a visible tilt — and
+  dragging is a far better answer than asking somebody to read pixel coordinates. Dragging
+  all four reproduces the hand-measured result to within 3 px.
+- **An orientation picker in the web app**, replacing the button that cycled the reading
+  edge blindly. All four rotations are shown as thumbnails; picking one rotates the finished
+  scan, which is a single pass over the pixels rather than a whole extra pipeline run.
+- `web/src/core/rotate.ts` and its tests.
 - **A browser app** in `web/`: drop a photo on the page and get a scan back, with nothing to
   install. The whole pipeline runs on the device — the photo is never uploaded, and there is
   no server to pay for. `web/src/core/` is a dependency-free TypeScript port of the C#
   engine, verified against the same reference certificate (7487x5355, paper white
-  R212 G203 B191, cropped 8/19/31/46 px). It builds to about 34 KB, so it opens instantly on
+  R212 G203 B190, cropped 8/19/31/46 px). It builds to about 34 KB, so it opens instantly on
   a phone; a Blazor WebAssembly build would have reused the C# directly but cost roughly
   2 MB of runtime before looking at a single pixel.
 - `web/tools/browser-check.mjs`: a dependency-free end-to-end smoke test that drives real
-  Chrome over the DevTools Protocol, hands the file input a photo, and verifies the result
-  card, the displayed stats and the download link.
+  Chrome over the DevTools Protocol, hands the file input a photo, drags corner handles, and
+  verifies the result card, the displayed stats and the download link.
+
+### Fixed
+
+- **The web app's corner overlay was drawn on the wrong box.** The frame had a fixed 3:4
+  aspect ratio while the photo was letterboxed inside it, so for any photo that was not 3:4
+  the quad was stretched relative to the image underneath. The frame now shrink-wraps the
+  image.
+
 
 
 ## [1.0.0] - 2026-09-27

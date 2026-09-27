@@ -67,7 +67,8 @@ function maxBackgroundLuma(image: RgbImage): number {
   return brightest;
 }
 
-describe.skipIf(!available)('reference certificate', () => {  it('reproduces the C# baseline', () => {
+describe.skipIf(!available)('reference certificate', () => {
+  it('reproduces the C# baseline', () => {
     const source = loadJpegRgb(fixture!);
     expect(source.width).toBe(6144);
     expect(source.height).toBe(8192);
@@ -143,11 +144,20 @@ describe.skipIf(!available)('reference certificate', () => {  it('reproduces the
     expect(minLuma).toBeGreaterThan(backgroundMax);
   }, 300_000);
 
-  it('also detects the corners automatically on this photo', () => {
+  it('detects the corners approximately on this photo', () => {
     const source = loadJpegRgb(fixture!);
 
-    // No manual corners: the detector has to find the page by itself and land close to the
-    // coordinates that were measured by hand.
+    // No manual corners: the detector has to find the page by itself.
+    //
+    // On this photo it gets within about 330 px of the hand-measured corners, which is a
+    // 6% error on a 7500 px edge — enough to leave a visible tilt in the output. The sheet
+    // is lying on a pale wooden table with a patterned quilt below it, and both have
+    // patches that pass the "bright and warm" paper test, so the blob the detector locks
+    // onto is not exactly the sheet.
+    //
+    // That is why the web app puts a draggable handle on each corner and treats the
+    // detector's answer as a starting point rather than the final word. This assertion
+    // exists to notice if detection gets *worse*, not to claim it is exact.
     const manual = parseQuad(MANUAL_CORNERS);
     const result = runPipeline(source, { readingEdge: 'right' });
 
@@ -155,9 +165,11 @@ describe.skipIf(!available)('reference certificate', () => {  it('reproduces the
     expect(result.paperFraction).toBeGreaterThan(0.3);
 
     const detected = result.paperQuad;
+    console.log(`  manual     ${manual}`);
+    console.log(`  detected   ${detected}`);
+
     const keys = ['tl', 'tr', 'br', 'bl'] as const;
     for (const key of keys) {
-      // 5% of the long edge is ~400px; the detector is expected to be far closer than that.
       expect(Math.abs(detected[key].x - manual[key].x)).toBeLessThan(400);
       expect(Math.abs(detected[key].y - manual[key].y)).toBeLessThan(400);
     }
