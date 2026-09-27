@@ -249,7 +249,9 @@ See [`CONTRIBUTING.md`](CONTRIBUTING.md).
 `web/dist` is a static folder, so anything that serves files will do. Cloudflare Pages is
 the documented default because `github.io` is often slow or unreachable from mainland China:
 
-1. Cloudflare dashboard → **Workers & Pages** → **Create** → **Pages** → **Connect to Git**.
+1. Cloudflare dashboard → **Compute** → **Workers & Pages** → **Create** → **Pages** →
+   **Connect to Git**. Cloudflare moved this entry under *Compute*; on older dashboards
+   *Workers & Pages* is a top-level sidebar item.
 2. Pick this repository.
 3. Root directory `web`, build command `npm ci && npm run build`, output directory `dist`.
 4. Environment variable `NODE_VERSION` = `24`.

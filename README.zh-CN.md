@@ -224,7 +224,8 @@ docs/                   算法说明与 README 配图
 `web/dist` 就是一个纯静态目录，任何能托管文件的地方都行。文档默认推荐 Cloudflare
 Pages，因为 `github.io` 在国内经常很慢甚至打不开：
 
-1. Cloudflare 控制台 → **Workers & Pages** → **Create** → **Pages** → **Connect to Git**。
+1. Cloudflare 控制台 → **Compute** → **Workers & Pages** → **Create** → **Pages** →
+   **Connect to Git**。（新版把入口收进了 Compute 底下；旧版侧边栏里直接就有 Workers & Pages。）
 2. 选择这个仓库。
 3. 根目录填 `web`，构建命令填 `npm ci && npm run build`，输出目录填 `dist`。
 4. 环境变量 `NODE_VERSION` = `24`。

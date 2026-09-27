@@ -67,7 +67,9 @@ workers. Nothing else in the app is new.
 
 The build is a static folder, so anything that serves files works. On Cloudflare Pages:
 
-1. Cloudflare dashboard → **Workers & Pages** → **Create** → **Pages** → **Connect to Git**.
+1. Cloudflare dashboard → **Compute** → **Workers & Pages** → **Create** → **Pages** →
+   **Connect to Git**. (Cloudflare moved this under *Compute*; older dashboards still have a
+   top-level *Workers & Pages* entry.)
 2. Pick the `PaperScan` repository.
 3. Set **Root directory** to `web`, **Build command** to `npm ci && npm run build`, and
    **Build output directory** to `dist`.
