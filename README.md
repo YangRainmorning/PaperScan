@@ -64,7 +64,10 @@ cd PaperScan
 ./scripts/build.ps1 -Publish -SelfContained
 ```
 
-That produces `dist/paperscan.exe` on Windows, `dist/paperscan` elsewhere.
+That produces:
+
+- `dist/paperscan.exe` on Windows
+- `dist/paperscan` on Linux and macOS
 
 ### Windows drag-and-drop
 
@@ -110,7 +113,11 @@ paperscan *.jpg --quiet
 | `-h, --help` | | Show help |
 | `-V, --version` | | Show version |
 
-Exit codes: `0` success, `1` at least one image failed, `2` bad usage.
+| Exit code | Meaning |
+|---|---|
+| `0` | Success |
+| `1` | At least one image failed |
+| `2` | Bad usage |
 
 ## Getting the corners right
 

@@ -54,7 +54,10 @@ cd PaperScan
 ./scripts/build.ps1 -Publish -SelfContained
 ```
 
-Windows 上产物是 `dist/paperscan.exe`，其他平台是 `dist/paperscan`。
+产物：
+
+- Windows：`dist\paperscan.exe`
+- Linux / macOS：`dist/paperscan`
 
 ### Windows 拖拽
 
@@ -100,7 +103,11 @@ paperscan *.jpg --quiet
 | `-h, --help` | | 显示帮助 |
 | `-V, --version` | | 显示版本 |
 
-退出码：`0` 成功，`1` 有图片处理失败，`2` 参数错误。
+| 退出码 | 含义 |
+|---|---|
+| `0` | 成功 |
+| `1` | 至少一张图片处理失败 |
+| `2` | 参数错误 |
 
 ## 四角不对怎么办
 
