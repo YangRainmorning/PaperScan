@@ -72,5 +72,5 @@ trimmer exists to guarantee — every border pixel is paper, not background — 
 both: the dark surround sits at luma ~25–100, and every one of the eight outermost
 row and column measurements is above 125.
 
-[Unreleased]: https://github.com/Done/PaperScan/compare/v1.0.0...HEAD
-[1.0.0]: https://github.com/Done/PaperScan/releases/tag/v1.0.0
+[Unreleased]: https://github.com/YangRainmorning/PaperScan/compare/v1.0.0...HEAD
+[1.0.0]: https://github.com/YangRainmorning/PaperScan/releases/tag/v1.0.0

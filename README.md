@@ -7,7 +7,7 @@
 Automatic page detection · perspective correction · white balance · background trimming
 Lossless PNG at native resolution · fully offline · cross-platform
 
-[![CI](https://github.com/Done/PaperScan/actions/workflows/ci.yml/badge.svg)](https://github.com/Done/PaperScan/actions/workflows/ci.yml)
+[![CI](https://github.com/YangRainmorning/PaperScan/actions/workflows/ci.yml/badge.svg)](https://github.com/YangRainmorning/PaperScan/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![.NET 8](https://img.shields.io/badge/.NET-8.0-512BD4.svg)](https://dotnet.microsoft.com/)
 
@@ -47,7 +47,7 @@ what `paperscan` produced from it with **no arguments at all**.
 ### Download a release
 
 Grab the archive for your platform from
-[Releases](https://github.com/Done/PaperScan/releases), unpack it,
+[Releases](https://github.com/YangRainmorning/PaperScan/releases), unpack it,
 and run `paperscan`. The self-contained builds need no .NET installation.
 
 ### As a .NET tool
@@ -59,7 +59,7 @@ dotnet tool install --global PaperScan.Cli
 ### From source
 
 ```bash
-git clone https://github.com/Done/PaperScan.git
+git clone https://github.com/YangRainmorning/PaperScan.git
 cd PaperScan
 ./scripts/build.ps1 -Publish -SelfContained
 ```

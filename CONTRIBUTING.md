@@ -9,7 +9,7 @@ turns out to be badly chosen.
 You need the .NET 8 SDK or newer.
 
 ```bash
-git clone https://github.com/Done/PaperScan.git
+git clone https://github.com/YangRainmorning/PaperScan.git
 cd PaperScan
 dotnet test
 ```

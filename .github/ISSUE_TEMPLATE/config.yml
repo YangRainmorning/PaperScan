@@ -2,8 +2,8 @@ blank_issues_enabled: false
 
 contact_links:
   - name: Question or usage help
-    url: https://github.com/Done/PaperScan/discussions
+    url: https://github.com/YangRainmorning/PaperScan/discussions
     about: Ask in Discussions rather than opening an issue.
   - name: Algorithm notes
-    url: https://github.com/Done/PaperScan/blob/main/docs/algorithm.md
+    url: https://github.com/YangRainmorning/PaperScan/blob/main/docs/algorithm.md
     about: How detection, rectification, white balance and trimming actually work.

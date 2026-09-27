@@ -37,7 +37,7 @@
 
 ### 直接下 Release
 
-到 [Releases](https://github.com/Done/PaperScan/releases) 下载对应平台的压缩包，
+到 [Releases](https://github.com/YangRainmorning/PaperScan/releases) 下载对应平台的压缩包，
 解压后直接运行 `paperscan`。自包含版本**不需要安装 .NET**。
 
 ### 用 .NET 工具安装
@@ -49,7 +49,7 @@ dotnet tool install --global PaperScan.Cli
 ### 从源码构建
 
 ```bash
-git clone https://github.com/Done/PaperScan.git
+git clone https://github.com/YangRainmorning/PaperScan.git
 cd PaperScan
 ./scripts/build.ps1 -Publish -SelfContained
 ```
