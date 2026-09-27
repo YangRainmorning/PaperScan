@@ -1,0 +1,47 @@
+name: Feature request
+description: Suggest a change in behaviour or a new capability.
+title: "[Feature]: "
+labels: ["enhancement", "needs triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        PaperScan is deliberately small. It rectifies and cleans up the photo; it does
+        not do OCR, shadow removal, or despeckling. That is a scope decision, not an
+        oversight — but if you have a case that genuinely needs something new, say so
+        and explain the workflow it unblocks.
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: The problem
+      description: What are you trying to do that PaperScan makes hard or impossible?
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: What you would like it to do
+      description: Describe the behaviour, not the implementation.
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: What you do today instead
+      description: Including manual `--corners` workarounds, if any.
+    validations:
+      required: false
+
+  - type: dropdown
+    id: scope
+    attributes:
+      label: Does this fit the existing scope?
+      options:
+        - Yes — it is still just rectifying and cleaning up a photo
+        - It needs a new processing stage
+        - Not sure
+    validations:
+      required: true

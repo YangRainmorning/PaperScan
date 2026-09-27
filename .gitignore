@@ -1,0 +1,55 @@
+# Build output
+[Bb]in/
+[Oo]bj/
+[Dd]ebug/
+[Rr]elease/
+[Ll]og/
+[Ll]ogs/
+dist/
+artifacts/
+*.binlog
+*.tlog
+
+# Visual Studio / Rider / VS Code
+.vs/
+.vscode/
+.idea/
+*.user
+*.suo
+*.userprefs
+*.DotSettings.user
+
+# Test results
+[Tt]est[Rr]esult*/
+*.trx
+*.coverage
+*.coveragexml
+coverage*.json
+coverage*.xml
+coverage*.info
+
+# NuGet
+*.nupkg
+*.snupkg
+packages/
+!**/packages/build/
+.nuget/
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+# MSBuild
+*.rsuser
+*.pdb
+*.cache
+
+# OS cruft
+.DS_Store
+Thumbs.db
+desktop.ini
+*.swp
+*~
+
+# Local scratch
+scratch/
+samples/local/

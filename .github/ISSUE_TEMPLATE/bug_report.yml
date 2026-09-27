@@ -1,0 +1,90 @@
+name: Bug report
+description: Something is wrong — a crash, a bad detection, a wrong size.
+title: "[Bug]: "
+labels: ["bug", "needs triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for the report. The single most useful thing you can include is the
+        `-verify.png` image: it shows a green quad over the detected corners, so it
+        tells us immediately whether detection or something later in the pipeline
+        went wrong.
+
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened
+      description: What did you expect, and what did you get instead?
+    validations:
+      required: true
+
+  - type: textarea
+    id: command
+    attributes:
+      label: The exact command
+      description: Copy and paste it, including the photo name.
+      render: shell
+      placeholder: paperscan photo.jpg --reading-edge right
+    validations:
+      required: true
+
+  - type: textarea
+    id: output
+    attributes:
+      label: Console output
+      description: Re-run without `--quiet` and paste everything it printed.
+      render: shell
+    validations:
+      required: true
+
+  - type: input
+    id: version
+    attributes:
+      label: PaperScan version
+      description: The output of `paperscan --version`.
+      placeholder: paperscan 1.0.0 (.NET 8.0)
+    validations:
+      required: true
+
+  - type: dropdown
+    id: os
+    attributes:
+      label: Operating system
+      options:
+        - Windows
+        - Linux
+        - macOS
+        - Other (describe below)
+    validations:
+      required: true
+
+  - type: textarea
+    id: verify-image
+    attributes:
+      label: Verify image
+      description: |
+        Drag the `-verify.png` file in here (or attach a downscaled copy — a 50 MP
+        original is not needed). Please do not attach documents you would rather not
+        publish.
+    validations:
+      required: false
+
+  - type: input
+    id: photo-size
+    attributes:
+      label: Photo size
+      description: Pixel dimensions of the input photo, and the file format.
+      placeholder: 6144x8192 JPEG
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Before submitting
+      options:
+        - label: I am on the latest release.
+          required: true
+        - label: I have looked at the `-verify.png` image to see what was detected.
+          required: false

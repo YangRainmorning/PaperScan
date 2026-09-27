@@ -1,0 +1,26 @@
+# Normalise line endings in the repository, check out native.
+* text=auto eol=lf
+
+# Windows scripts must keep CRLF to run from cmd.exe / PowerShell 5.1.
+*.cmd text eol=crlf
+*.bat text eol=crlf
+*.ps1 text eol=crlf
+
+# Shell scripts must keep LF.
+*.sh text eol=lf
+
+# Binary assets: never diff or convert.
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.zip binary
+*.gz binary
+*.dll binary
+*.exe binary
+*.pdb binary
+
+# Keep PNG/JPEG out of the language statistics for documentation images.
+docs/images/* linguist-documentation
+legacy/* linguist-vendored

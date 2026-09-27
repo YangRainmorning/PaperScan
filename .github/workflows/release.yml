@@ -1,0 +1,95 @@
+name: Release
+
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Tag to publish (for example v1.0.0)
+        required: true
+
+permissions:
+  contents: write
+
+env:
+  DOTNET_NOLOGO: 'true'
+  DOTNET_CLI_TELEMETRY_OPTOUT: 'true'
+  PROJECT: src/PaperScan.Cli/PaperScan.Cli.csproj
+
+jobs:
+  build:
+    name: build (${{ matrix.rid }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { rid: win-x64, archive: zip }
+          - { rid: win-arm64, archive: zip }
+          - { rid: linux-x64, archive: tar.gz }
+          - { rid: linux-arm64, archive: tar.gz }
+          - { rid: osx-x64, archive: tar.gz }
+          - { rid: osx-arm64, archive: tar.gz }
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Publish
+        run: >-
+          dotnet publish ${{ env.PROJECT }}
+          -c Release -r ${{ matrix.rid }}
+          --self-contained true
+          -p:PublishSingleFile=true
+          -p:IncludeNativeLibrariesForSelfExtract=true
+          -p:PublishTrimmed=false
+          -p:DebugType=none
+          -o out
+          --nologo
+
+      - name: Package
+        id: package
+        run: |
+          set -euo pipefail
+          NAME="PaperScan-${{ github.ref_name }}-${{ matrix.rid }}"
+          cd out
+          if [ "${{ matrix.archive }}" = "zip" ]; then
+            zip -r "../${NAME}.zip" .
+            echo "file=../${NAME}.zip" >> "$GITHUB_OUTPUT"
+          else
+            chmod +x paperscan
+            tar -czf "../${NAME}.tar.gz" .
+            echo "file=../${NAME}.tar.gz" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Upload
+        uses: actions/upload-artifact@v4
+        with:
+          name: PaperScan-${{ matrix.rid }}
+          path: ${{ steps.package.outputs.file }}
+          if-no-files-found: error
+
+  release:
+    name: publish release
+    needs: build
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/v')
+
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: dist
+          merge-multiple: true
+
+      - name: List assets
+        run: ls -lh dist
+
+      - uses: softprops/action-gh-release@v2
+        with:
+          files: dist/*
+          generate_release_notes: true
+          draft: false

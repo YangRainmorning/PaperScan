@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>PaperScan.Cli</RootNamespace>
+    <AssemblyName>paperscan</AssemblyName>
+    <Description>Turn photos of documents into clean, rectified, white-balanced scans.</Description>
+    <PackAsTool>true</PackAsTool>
+    <ToolCommandName>paperscan</ToolCommandName>
+    <PackageId>PaperScan.Cli</PackageId>
+    <PackageTags>scan;document;photo;perspective;image</PackageTags>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\PaperScan.Core\PaperScan.Core.csproj" />
+  </ItemGroup>
+
+</Project>
