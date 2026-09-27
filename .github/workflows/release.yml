@@ -56,14 +56,15 @@ jobs:
         run: |
           set -euo pipefail
           NAME="PaperScan-${{ github.ref_name }}-${{ matrix.rid }}"
+          mkdir -p dist
           cd out
           if [ "${{ matrix.archive }}" = "zip" ]; then
-            zip -r "../${NAME}.zip" .
-            echo "file=../${NAME}.zip" >> "$GITHUB_OUTPUT"
+            zip -r "../dist/${NAME}.zip" .
+            echo "file=dist/${NAME}.zip" >> "$GITHUB_OUTPUT"
           else
             chmod +x paperscan
-            tar -czf "../${NAME}.tar.gz" .
-            echo "file=../${NAME}.tar.gz" >> "$GITHUB_OUTPUT"
+            tar -czf "../dist/${NAME}.tar.gz" .
+            echo "file=dist/${NAME}.tar.gz" >> "$GITHUB_OUTPUT"
           fi
 
       - name: Upload
