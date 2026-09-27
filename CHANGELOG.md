@@ -7,6 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- **A browser app** in `web/`: drop a photo on the page and get a scan back, with nothing to
+  install. The whole pipeline runs on the device — the photo is never uploaded, and there is
+  no server to pay for. `web/src/core/` is a dependency-free TypeScript port of the C#
+  engine, verified against the same reference certificate (7487x5355, paper white
+  R212 G203 B191, cropped 8/19/31/46 px). It builds to about 34 KB, so it opens instantly on
+  a phone; a Blazor WebAssembly build would have reused the C# directly but cost roughly
+  2 MB of runtime before looking at a single pixel.
+- `web/tools/browser-check.mjs`: a dependency-free end-to-end smoke test that drives real
+  Chrome over the DevTools Protocol, hands the file input a photo, and verifies the result
+  card, the displayed stats and the download link.
+
+
 ## [1.0.0] - 2026-09-27
 
 First release of PaperScan, a cross-platform rewrite of the v0 PowerShell tool.

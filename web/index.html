@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="color-scheme" content="light dark" />
+    <title>PaperScan — 把照片变成扫描件</title>
+    <meta
+      name="description"
+      content="把手机拍的文档照片变成扫描件：自动找纸面、透视矫正、白平衡、裁掉背景。全部在浏览器里完成，照片不会上传。"
+    />
+    <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
+    <meta property="og:title" content="PaperScan — 把照片变成扫描件" />
+    <meta
+      property="og:description"
+      content="自动找纸面 · 透视矫正 · 白平衡 · 裁掉背景。全部在浏览器里完成，不上传。"
+    />
+    <meta property="og:type" content="website" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="brand">
+        <svg class="logo" viewBox="0 0 32 32" aria-hidden="true">
+          <path d="M7 3h12l8 8v18a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z" />
+          <path class="fold" d="M19 3v8h8" />
+          <path class="rule" d="M10 17h12M10 21h12M10 25h7" />
+        </svg>
+        <div>
+          <h1 id="title"></h1>
+          <p id="tagline"></p>
+        </div>
+      </div>
+      <button id="lang" class="ghost small" type="button" aria-label="Switch language">EN</button>
+    </header>
+
+    <main>
+      <section id="picker" class="card drop" tabindex="0" role="button">
+        <svg class="drop-icon" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 16V4m0 0L8 8m4-4 4 4" />
+          <path d="M4 15v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3" />
+        </svg>
+        <h2 id="dropTitle"></h2>
+        <p id="dropHint" class="muted"></p>
+        <span class="primary as-button" id="choose"></span>
+        <p id="privacy" class="privacy"></p>
+      </section>
+      <input id="file" type="file" accept="image/*" hidden />
+
+      <section id="working" class="card working" hidden aria-live="polite">
+        <div class="spinner" aria-hidden="true"></div>
+        <p id="stage"></p>
+      </section>
+
+      <section id="result" class="card" hidden>
+        <div class="compare">
+          <figure>
+            <figcaption id="beforeLabel"></figcaption>
+            <div class="frame">
+              <img id="beforeImg" alt="" />
+              <canvas id="overlay" hidden></canvas>
+            </div>
+          </figure>
+          <figure>
+            <figcaption id="afterLabel"></figcaption>
+            <div class="frame">
+              <img id="afterImg" alt="" />
+            </div>
+          </figure>
+        </div>
+
+        <label class="toggle">
+          <input type="checkbox" id="showDetection" />
+          <span id="showDetectionLabel"></span>
+        </label>
+
+        <dl class="stats" id="stats"></dl>
+
+        <div class="actions">
+          <a id="download" class="primary" download></a>
+          <button id="rotate" class="secondary" type="button"></button>
+          <button id="again" class="ghost" type="button"></button>
+        </div>
+
+        <details id="advanced" class="advanced">
+          <summary id="advancedLabel"></summary>
+
+          <div class="field">
+            <span class="field-label" id="formatLabel"></span>
+            <div class="choices">
+              <label><input type="radio" name="format" value="jpeg" checked /><span id="formatJpeg"></span></label>
+              <label><input type="radio" name="format" value="png" /><span id="formatPng"></span></label>
+            </div>
+          </div>
+
+          <div class="field">
+            <span class="field-label" id="maxSizeLabel"></span>
+            <div class="choices">
+              <label><input type="radio" name="maxsize" value="original" checked /><span id="maxSizeOriginal"></span></label>
+              <label><input type="radio" name="maxsize" value="3000" /><span>3000 px</span></label>
+              <label><input type="radio" name="maxsize" value="1600" /><span>1600 px</span></label>
+            </div>
+          </div>
+
+          <div class="field">
+            <span class="field-label" id="marginLabel"></span>
+            <div class="choices">
+              <label><input type="radio" name="margin" value="0" checked /><span id="marginNone"></span></label>
+              <label><input type="radio" name="margin" value="0.03" /><span id="marginSmall"></span></label>
+              <label><input type="radio" name="margin" value="0.08" /><span id="marginMedium"></span></label>
+            </div>
+          </div>
+        </details>
+      </section>
+
+      <section id="error" class="card error" hidden aria-live="assertive">
+        <p id="errorText"></p>
+        <button id="retry" class="primary" type="button"></button>
+      </section>
+    </main>
+
+    <footer id="footer" class="footer"></footer>
+
+    <script type="module" src="./src/main.ts"></script>
+  </body>
+</html>

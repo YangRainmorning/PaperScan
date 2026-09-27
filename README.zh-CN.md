@@ -20,6 +20,18 @@
 两张图都是合成的，由测试夹具重新生成。照片带透视倾斜、暖色偏色、投影和传感器噪点；
 扫描件是 `paperscan` **不加任何参数**直接跑出来的结果。
 
+## 两种用法
+
+| | |
+|---|---|
+| **[直接在网页里用](https://YOUR-PROJECT.pages.dev)** | 什么都不用装。把照片拖到页面上就出扫描件，手机上可以直接拍。照片的**解码、矫正、编码全部在你自己的设备上完成** —— 没有服务器，不会上传，首次打开后离线也能用。 |
+| **[安装命令行版](#安装)** | 同一套算法，可脚本化、可批量，按原始分辨率输出无损 PNG。适合一次处理五十张的情况。 |
+
+两者共用同一条五阶段流水线和同一个回归基准；为什么会有两份实现，见
+[`web/README.md`](web/README.md)。
+
+> 上面的网址是占位符 —— 部署方法见[部署网页版](#部署网页版)。
+
 ## 它做什么
 
 - **自己找纸面。** 不用你选框、不用点四角。它把照片阈值化成「够亮 + 偏暖」的像素，
@@ -176,13 +188,18 @@ paperscan photo.jpg --reading-edge right \
 
 ## 开发
 
-需要 .NET 8 SDK（更新的也行 —— 项目目标是 `net8.0` 且设置了 `RollForward=LatestMajor`）。
+需要 .NET 8 SDK（更新的也行 —— 项目目标是 `net8.0` 且设置了 `RollForward=LatestMajor`）；
+网页版还需要 Node 24。
 
 ```bash
 dotnet test                          # 44 个测试
 ./scripts/build.ps1                  # 还原 + 构建 + 测试
 ./scripts/build.ps1 -Publish -SelfContained
 ./scripts/build.ps1 -Publish -Runtime linux-x64 -OutputDirectory dist/linux
+
+cd web
+npm ci && npm test && npm run build  # 45 个测试，然后在 web/dist 产出 ~34 KB 的站点
+npm run dev                          # http://localhost:5173
 ```
 
 仓库结构：
@@ -191,12 +208,34 @@ dotnet test                          # 44 个测试
 src/PaperScan.Core/     引擎 —— 检测、单应、矫正、裁边
 src/PaperScan.Cli/      paperscan 命令行工具
 tests/PaperScan.Tests/  xunit 测试，含合成照片的端到端用例
+web/                    网页版 —— Core 的零依赖 TypeScript 移植
 scripts/                构建脚本与拖拽启动器
 legacy/                 移植来源的 v0 PowerShell 实现（已冻结）
 docs/                   算法说明与 README 配图
 ```
 
+`web/` 有自己的 [README](web/README.md)，讲了架构、与 C# 默认值的两处有意偏离，
+以及浏览器路径是怎么做冒烟测试的。
+
 见 [`CONTRIBUTING.md`](CONTRIBUTING.md)。
+
+## 部署网页版
+
+`web/dist` 就是一个纯静态目录，任何能托管文件的地方都行。文档默认推荐 Cloudflare
+Pages，因为 `github.io` 在国内经常很慢甚至打不开：
+
+1. Cloudflare 控制台 → **Workers & Pages** → **Create** → **Pages** → **Connect to Git**。
+2. 选择这个仓库。
+3. 根目录填 `web`，构建命令填 `npm ci && npm run build`，输出目录填 `dist`。
+4. 环境变量 `NODE_VERSION` = `24`。
+5. 部署。之后往 `main` 推送会自动重新部署。
+
+部署完把本文件和 `README.md` 里的 `YOUR-PROJECT` 换成分配到的 `*.pages.dev` 域名。
+`web/public/_headers` 会被原样采用，里面配了严格的 CSP 和带哈希资源的长期缓存。
+
+想用 GitHub Pages 的话，把 `web/vite.config.ts` 里的 `base` 改成 `'/PaperScan/'`，
+然后发布 `web/dist`。
+
 
 ## 关于遗留的参考实现
 
@@ -212,3 +251,5 @@ PaperScan 依赖 [SixLabors.ImageSharp](https://github.com/SixLabors/ImageSharp)
 其许可是 [Six Labors Split License](https://github.com/SixLabors/ImageSharp/blob/main/LICENSE)：
 开源项目免费，商业用途可能需要向 Six Labors 购买授权。如果这对你有影响，本项目对图像库的
 依赖只有「解码 + 编码」两处，替换成一个宽松许可的库是可控的改动。
+
+网页版不受影响：它用的是浏览器自带的解码器和编码器，`web/src/core/` 里没有任何第三方依赖。

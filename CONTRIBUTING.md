@@ -23,6 +23,16 @@ cycle plus an optional publish, use `scripts/build.ps1`:
 ./scripts/build.ps1 -Publish -Runtime linux-x64 -OutputDirectory dist/linux
 ```
 
+The browser app is a separate Node project:
+
+```bash
+cd web
+npm ci
+npm test                 # 45 vitest tests
+npm run build            # -> web/dist, about 34 KB
+npm run dev              # http://localhost:5173
+```
+
 ## Layout
 
 | Path | What lives there |
@@ -30,14 +40,23 @@ cycle plus an optional publish, use `scripts/build.ps1`:
 | `src/PaperScan.Core/` | The engine. No console, no CLI concerns, no file paths. |
 | `src/PaperScan.Cli/` | Argument parsing, console output, exit codes. Thin on purpose. |
 | `tests/PaperScan.Tests/` | xunit. Synthetic images only — no binary fixtures. |
+| `web/src/core/` | The TypeScript port of the engine. No DOM, no canvas, no Node. |
+| `web/src/worker.ts` | Runs `web/src/core/` off the main thread. |
+| `web/src/imageio.ts` | The only file that touches canvas. |
 | `scripts/` | Build and launcher helpers. |
 | `legacy/` | Frozen v0 PowerShell implementation. Do not change it. |
 | `docs/` | Algorithm notes and README images. |
 
+
 ## Guidelines
 
 - **Keep the algorithm in `Core` and the I/O in `Cli`.** If you find yourself writing
-  `Console.WriteLine` in `PaperScan.Core`, something has gone wrong.
+  `Console.WriteLine` in `PaperScan.Core`, something has gone wrong. The same rule applies
+  to `web/src/core/`: no `document`, no `canvas`, no `window`, so it stays testable in plain
+  Node and portable.
+- **A behaviour change belongs in both engines.** If you tune a threshold in `PaperScan.Core`,
+  make the same change in `web/src/core/` and update both test suites. They are pinned to the
+  same regression target on purpose.
 - **No binary test fixtures.** Build the image you need in the test, using
   `TestImages`. It keeps the repository small and makes the intent readable.
 - **Test the property, not the pixel.** A corner-detection test should assert that the

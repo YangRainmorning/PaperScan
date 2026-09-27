@@ -73,3 +73,45 @@ jobs:
           ./out/paperscan --version
           ./out/paperscan --help
           ./out/paperscan --not-a-real-option && exit 1 || test $? -eq 2
+
+  web:
+    name: web app
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: web
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+
+      - name: Install
+        run: npm ci
+
+      - name: Typecheck and build
+        run: npm run build
+
+      - name: Test
+        run: npm test
+
+      - name: The built site must stay small enough to open instantly on a phone
+        run: |
+          set -euo pipefail
+          total=$(du -sb dist | cut -f1)
+          echo "dist is $total bytes"
+          if [ "$total" -gt 200000 ]; then
+            echo "::error::the web build grew past 200 KB; it is meant to open instantly on a phone"
+            exit 1
+          fi
+
+      - name: Upload the built site
+        uses: actions/upload-artifact@v4
+        with:
+          name: paperscan-web
+          path: web/dist
+          if-no-files-found: error

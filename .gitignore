@@ -10,6 +10,13 @@ artifacts/
 *.binlog
 *.tlog
 
+# Node / the web app
+node_modules/
+.vite/
+*.tsbuildinfo
+.npm/
+npm-debug.log*
+
 # Visual Studio / Rider / VS Code
 .vs/
 .vscode/
