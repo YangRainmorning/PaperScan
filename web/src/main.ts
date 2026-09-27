@@ -57,6 +57,7 @@ let displayed: RgbImage | null = null;
 
 let lastStats: ScanStats | null = null;
 let afterUrl: string | null = null;
+let afterBlob: Blob | null = null;
 let thumbUrls: string[] = [];
 
 const worker = new Worker(new URL('./worker.ts', import.meta.url), { type: 'module' });
@@ -83,6 +84,7 @@ function applyLanguage(): void {
   $('cornerHint').textContent = t.cornerHint;
   $('resetCorners').textContent = t.resetCorners;
   $('download').textContent = t.download;
+  $('share').textContent = t.share;
   $('again').textContent = t.again;
   $('advancedLabel').textContent = t.advanced;
   $('orientationLabel').textContent = t.orientation;
@@ -296,13 +298,15 @@ async function applyOrientation(next: number): Promise<void> {
 
   const blob = await encodeImage(rotated, settings.format, 0.92);
   if (afterUrl) URL.revokeObjectURL(afterUrl);
+  afterBlob = blob;
   afterUrl = URL.createObjectURL(blob);
 
   $<HTMLImageElement>('afterImg').src = afterUrl;
 
   const download = $<HTMLAnchorElement>('download');
   download.href = afterUrl;
-  download.download = `${fileName}-scan.${settings.format === 'png' ? 'png' : 'jpg'}`;
+  download.download = scanFileName();
+  updateShare();
 
   if (lastStats) renderStats(lastStats, rotated, blob.size);
   markSelected();
@@ -360,6 +364,38 @@ function markSelected(): void {
     button.setAttribute('aria-checked', String(index === turns));
   });
 }
+
+function scanFileName(): string {
+  return `${fileName}-scan.${settings.format === 'png' ? 'png' : 'jpg'}`;
+}
+
+function scanFile(): File | null {
+  if (!afterBlob) return null;
+  return new File([afterBlob], scanFileName(), { type: afterBlob.type });
+}
+
+/**
+ * On a phone, an `<a download>` link often just opens the image rather than putting it in the
+ * camera roll. The share sheet is the way to actually save it, so offer that where the
+ * browser supports sharing files.
+ */
+function updateShare(): void {
+  const button = $<HTMLButtonElement>('share');
+  const file = scanFile();
+  const supported =
+    file !== null &&
+    typeof navigator.canShare === 'function' &&
+    navigator.canShare({ files: [file] });
+  button.hidden = !supported;
+}
+
+$('share').addEventListener('click', () => {
+  const file = scanFile();
+  if (!file) return;
+  void navigator.share({ files: [file] }).catch(() => {
+    // The user dismissed the sheet, or the browser refused; the download link is still there.
+  });
+});
 
 async function objectUrl(image: RgbImage): Promise<string> {
   const blob = await encodeImage(image, 'jpeg', 0.82);
@@ -583,6 +619,7 @@ function releaseUrls(): void {
   if (afterUrl) URL.revokeObjectURL(afterUrl);
   for (const url of thumbUrls) URL.revokeObjectURL(url);
   afterUrl = null;
+  afterBlob = null;
   thumbUrls = [];
 }
 

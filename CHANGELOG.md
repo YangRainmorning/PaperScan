@@ -9,6 +9,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **Edge snapping after blob detection.** The blob pass answers "roughly where is the sheet"
+  and on a cluttered surface is only roughly right — on the reference certificate one corner
+  comes out 320 px adrift, which leaves a visible tilt in the scan. Each rough edge is now
+  walked with a profile search and snapped to the outermost step that is nearly as strong as
+  the best one on that profile, then fitted with a robust least-squares line. Worst corner
+  error drops from 320 px to 19 px, and a fully automatic scan of the reference certificate
+  now comes out at 7452x5284 against 7448x5290 for the hand-measured corners.
+- **A "Save to Photos" button** in the web app, shown when the browser accepts a file through
+  `navigator.canShare`. An `<a download>` link often just opens the image on a phone rather
+  than saving it to the camera roll.
+
 - **Draggable corners in the web app.** The page quad is drawn over the photo with a handle
   at each corner; releasing one re-runs the pipeline with those corners. Automatic detection
   is only as good as the surface the sheet is lying on — on the reference certificate it

@@ -25,6 +25,7 @@ export interface Strings {
   readonly resetCorners: string;
 
   readonly download: string;
+  readonly share: string;
   readonly rotate: string;
   readonly again: string;
   readonly advanced: string;
@@ -81,6 +82,7 @@ const en: Strings = {
   resetCorners: 'Detect again',
 
   download: 'Download',
+  share: 'Save to Photos',
   rotate: 'Wrong way up? Rotate',
   again: 'Another photo',
   advanced: 'Advanced',
@@ -138,6 +140,7 @@ const zh: Strings = {
   resetCorners: '重新自动检测',
 
   download: '下载',
+  share: '保存到相册',
   rotate: '方向不对？转一下',
   again: '换一张',
   advanced: '高级选项',

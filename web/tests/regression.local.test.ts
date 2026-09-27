@@ -144,20 +144,16 @@ describe.skipIf(!available)('reference certificate', () => {
     expect(minLuma).toBeGreaterThan(backgroundMax);
   }, 300_000);
 
-  it('detects the corners approximately on this photo', () => {
+  it('detects the corners on this photo', () => {
     const source = loadJpegRgb(fixture!);
 
     // No manual corners: the detector has to find the page by itself.
     //
-    // On this photo it gets within about 330 px of the hand-measured corners, which is a
-    // 6% error on a 7500 px edge — enough to leave a visible tilt in the output. The sheet
-    // is lying on a pale wooden table with a patterned quilt below it, and both have
-    // patches that pass the "bright and warm" paper test, so the blob the detector locks
-    // onto is not exactly the sheet.
-    //
-    // That is why the web app puts a draggable handle on each corner and treats the
-    // detector's answer as a starting point rather than the final word. This assertion
-    // exists to notice if detection gets *worse*, not to claim it is exact.
+    // The blob pass alone is rough — on this photo it is 320 px out on one corner, because
+    // the sheet lies on a pale wooden table over a patterned quilt and both have patches
+    // that pass the "bright and warm" paper test. Snapping each edge onto the outermost
+    // strong step in the image brings that to under 25 px vertically, which is what removes
+    // the visible tilt.
     const manual = parseQuad(MANUAL_CORNERS);
     const result = runPipeline(source, { readingEdge: 'right' });
 
@@ -169,9 +165,18 @@ describe.skipIf(!available)('reference certificate', () => {
     console.log(`  detected   ${detected}`);
 
     const keys = ['tl', 'tr', 'br', 'bl'] as const;
+    let worstX = 0;
+    let worstY = 0;
     for (const key of keys) {
-      expect(Math.abs(detected[key].x - manual[key].x)).toBeLessThan(400);
-      expect(Math.abs(detected[key].y - manual[key].y)).toBeLessThan(400);
+      worstX = Math.max(worstX, Math.abs(detected[key].x - manual[key].x));
+      worstY = Math.max(worstY, Math.abs(detected[key].y - manual[key].y));
     }
+    console.log(`  worst error dx ${worstX.toFixed(0)} dy ${worstY.toFixed(0)}`);
+
+    // 150 px on a 7500 px edge is 2% — not exact, but the tilt is gone. The web app still
+    // puts a draggable handle on each corner, because this is a heuristic on a photograph
+    // and there is no threshold that makes it exact.
+    expect(worstY).toBeLessThan(60);
+    expect(worstX).toBeLessThan(150);
   }, 300_000);
 });

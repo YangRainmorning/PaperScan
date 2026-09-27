@@ -63,22 +63,38 @@ of the pixel buffer (transferred, not copied) and posts progress back per stage.
 
 ## Correcting the corners
 
-Automatic detection is good on a plain background and **not** reliable on a cluttered one.
-The sheet is found by thresholding to "bright and warm" pixels, and a pale wooden table or
-a light quilt can hold patches that pass the same test. On the reference certificate — a
-sheet on a wooden table over a patterned quilt — detection lands within about 330 px of the
-hand-measured corners, and on a 7500 px edge that is a visible tilt.
+Corner detection runs in two passes.
 
-So the detector's answer is treated as a **starting point**: the page quad is drawn over the
-photo with a draggable handle at each corner, and releasing a handle re-runs the pipeline
-with those corners. Dragging all four onto the sheet reproduces the hand-measured result to
-within 3 px (5290x7451 against the CLI's 5290x7448), which is the honest way to get an exact
-answer on a hard photo. `Detect again` puts it back.
+The first is the blob pass inherited from the C# engine: threshold to "bright and warm"
+pixels, group them, read the extremes off the largest blob. That answers *roughly* where the
+sheet is, and on a cluttered surface it is only roughly right — on the reference certificate,
+which lies on a pale wooden table over a patterned quilt, one corner comes out 320 px adrift.
+No threshold fixes that: the sheet's own corners are dark (mean luma ~50) and patches of the
+table still pass the paper test.
 
-This is also why the app rectifies in the detection orientation and rotates the finished
-scan afterwards, rather than re-running the pipeline with a different reading edge: the
+The second pass snaps each edge onto the image. It walks a profile across the rough edge,
+scores the luma step at every offset, and takes the **outermost** offset that is nearly as
+strong as the best one on that profile — the page's boundary is the outermost major edge
+across a profile, whereas a printed border or a header rule sits inside it. A robust
+least-squares line fit through those points then ignores whatever the blob got wrong. That
+drops the worst corner error from 320 px to under 25 px vertically, which is what removes the
+visible tilt: uploading the reference certificate with no correction at all now yields
+7452 x 5284, against 7448 x 5290 for the hand-measured corners.
+
+It is still a heuristic on a photograph, so the page quad is also drawn over the photo with a
+draggable handle at each corner, and releasing one re-runs the pipeline with those corners.
+`Detect again` puts it back.
+
+This is also why the app rectifies in the detection orientation and rotates the finished scan
+afterwards, rather than re-running the pipeline with a different reading edge: the
 orientation picker shows all four rotations as thumbnails, so a wrong guess costs one click
 instead of a guess-and-check cycle.
+
+## Saving the result
+
+Desktop gets a download link. On a phone an `<a download>` often just opens the image instead
+of putting it in the camera roll, so where `navigator.canShare` accepts a file the app also
+offers **Save to Photos**, which hands the file to the system share sheet.
 
 ## Browser support
 
